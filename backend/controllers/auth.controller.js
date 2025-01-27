@@ -1,5 +1,6 @@
 import { generateTokenAndSetCookie } from "../lib/utils/generateToken.js";
 import User from "../model/user.model.js";
+import { v2 as cloudinary } from "cloudinary";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -127,53 +128,6 @@ export const getme = async (req, res) => {
     console.log("Error in get me controller :", error);
     res.status(500).json({
       message: "error in get me controller",
-    });
-  }
-};
-
-export const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find().select("-password");
-
-    res.status(200).json(users);
-  } catch (error) {
-    console.log("Error in getting all users :", error);
-    res.status(500).json({
-      message: "error in getting all users",
-    });
-  }
-};
-
-export const getSingleUser = async (req, res) => {
-  const { username } = req.params;
-  try {
-    const searchUser = await User.findOne({ username: username }).select(
-      "-password"
-    );
-
-    if (!searchUser) return res.status(404).json({ message: "user not found" });
-
-    res.status(200).json(searchUser);
-  } catch (error) {
-    console.log("Error in getting single user :", error);
-    res.status(500).json({
-      message: "error in getting single user",
-    });
-  }
-};
-
-export const updateProfile = async (req, res) => {
-  const { fullname, username, email, currentpassword, newpassword, bio, link } =
-    req.body;
-
-  let { profileImg, coverImg } = req.body;
-  const userId = req.user._id;
-  try {
-    const user = await User.findById(userId);
-  } catch (error) {
-    console.log("Error in Updating Profile user :", error);
-    res.status(500).json({
-      message: "error in Updating Profile user",
     });
   }
 };
